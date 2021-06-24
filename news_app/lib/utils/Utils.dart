@@ -11,7 +11,6 @@ class Utils{
   static double getScreenWidth(BuildContext context){
     return MediaQuery.of(context).size.width;
   }
-
    static toast(String toastMsg){
 
      print(toastMsg);
