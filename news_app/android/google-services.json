@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "360176097986",
+    "project_id": "news-app-f34d2",
+    "storage_bucket": "news-app-f34d2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:360176097986:android:1d05c5878bbafa7f5bb95b",
+        "android_client_info": {
+          "package_name": "com.evampsaanga.news_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "360176097986-bnluv6p5goavirjm5dtf96lt4vvbs1dm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHoNoLf5hgUiP8tD6HuUx2dqwX4AHWVNs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "360176097986-bnluv6p5goavirjm5dtf96lt4vvbs1dm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/utils/Utils.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class BaseBlock {
   late BuildContext context;
@@ -88,14 +89,17 @@ class BaseBlock {
   }
 
   toast(String message) {
-    /*Fluttertoast.showToast(
+
+    printLog(message);
+
+    return Fluttertoast.showToast(
         msg: message,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.red,
         textColor: Colors.white,
-        fontSize: 16.0);*/
+        fontSize: 16.0);
   }
 
 /*String unixToStringFormat1(int timestamp, String format) {
