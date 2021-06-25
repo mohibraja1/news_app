@@ -14,11 +14,11 @@ class AddNewsScreen extends StatefulWidget {
 
 class _State extends State<AddNewsScreen> {
   late AddNewsScreenBloc mBloc;
+
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
-  PickedFile? _imageFile;
-  dynamic _pickImageError;
+  String _imageFilePath = "";
   final _picker = ImagePicker();
 
   @override
@@ -46,7 +46,6 @@ class _State extends State<AddNewsScreen> {
             child: ListView(
               children: [
                 TextField(
-
                   controller: titleController,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
@@ -126,11 +125,9 @@ class _State extends State<AddNewsScreen> {
 
     mBloc.printLog('starting adding data on firebase');
 
-    var path = "";
-    if (_imageFile != null && _imageFile!.path != null) {
-      path = _imageFile!.path;
-    }
-    final newsModel = NewsModel(titleController.text, descriptionController.text, path);
+    final newsModel = NewsModel(
+        titleController.text, descriptionController.text, _imageFilePath);
+
     mBloc.addNewsRecordToFirebaseDB(newsModel);
   }
 
@@ -139,16 +136,21 @@ class _State extends State<AddNewsScreen> {
     final PickedFile? pickedFile =
         await _picker.getImage(source: ImageSource.gallery);
 
-    setState(() {
-      _imageFile = pickedFile;
-    });
+    final downloadLink = mBloc.uploadImageToFirebase(File(pickedFile!.path));
+
+    downloadLink.then((value) => {
+          setState(() {
+            print('value is $value');
+            _imageFilePath = value;
+          })
+        });
   }
 
   Widget _previewImage() {
-    if (_imageFile != null) {
-      return Semantics(
-          child: Image.file(File(_imageFile!.path)),
-          label: 'image_picker_example_picked_image');
+    if (_imageFilePath.isNotEmpty) {
+      print(_imageFilePath);
+
+      return Semantics(child: Image.network(_imageFilePath));
     } else {
       return Container(
         width: 1,
