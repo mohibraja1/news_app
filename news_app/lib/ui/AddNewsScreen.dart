@@ -45,6 +45,7 @@ class _State extends State<AddNewsScreen> {
             child: ListView(
               children: [
                 TextField(
+
                   controller: titleController,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(),
