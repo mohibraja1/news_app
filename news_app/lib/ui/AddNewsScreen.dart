@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:news_app/blocs/AddNewsScreen.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:news_app/models/NewsModel.dart';
 
 class AddNewsScreen extends StatefulWidget {
   @override
@@ -124,6 +125,13 @@ class _State extends State<AddNewsScreen> {
     }
 
     mBloc.printLog('starting adding data on firebase');
+
+    var path = "";
+    if (_imageFile != null && _imageFile!.path != null) {
+      path = _imageFile!.path;
+    }
+    final newsModel = NewsModel(titleController.text, descriptionController.text, path);
+    mBloc.addNewsRecordToFirebaseDB(newsModel);
   }
 
   Future<void> pickImageFromGallery() async {

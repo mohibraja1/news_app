@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:news_app/models/NewsModel.dart';
+import 'package:news_app/utils/FireBaseDatabase.dart';
 import 'package:news_app/utils/Utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -89,7 +91,6 @@ class BaseBlock {
   }
 
   toast(String message) {
-
     printLog(message);
 
     return Fluttertoast.showToast(
@@ -112,4 +113,6 @@ class BaseBlock {
     var date = new DateTime.fromMicrosecondsSinceEpoch(time * 1000);
     return date.format(format);
   }*/
+
+
 }

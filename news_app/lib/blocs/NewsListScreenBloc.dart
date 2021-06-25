@@ -3,11 +3,11 @@ import 'package:news_app/blocs/BaseBlock.dart';
 import 'package:news_app/models/NewsModel.dart';
 import 'package:news_app/utils/FireBaseDatabase.dart';
 
-class AddNewsScreenBloc extends BaseBlock {
+class NewsListScreenBloc extends BaseBlock {
 
   late MyFireBaseDatabase db;
 
-  AddNewsScreenBloc(BuildContext context) : super(context) {
+  NewsListScreenBloc(BuildContext context) : super(context) {
     db = MyFireBaseDatabase();
   }
 
@@ -15,7 +15,7 @@ class AddNewsScreenBloc extends BaseBlock {
     db.addEntryToFireBase(newsModel);
   }
 
-  void readAllNewsData() {
-    db.readAllNewsData();
+  Future<List<NewsModel>> readAllNewsData() async {
+    return db.readAllNewsData();
   }
 }

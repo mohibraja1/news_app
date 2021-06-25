@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/blocs/HomeScreenBloc.dart';
 import 'package:news_app/ui/AddNewsScreen.dart';
+import 'package:news_app/ui/NewsListScreen.dart';
+import 'package:news_app/ui/NewsListhome.dart';
 
 class HomeScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
-
     final bloc = HomeScreenBloc(context);
 
     return WillPopScope(
@@ -29,15 +31,18 @@ class HomeScreen extends StatelessWidget {
                     color: Colors.amber,
                     padding: EdgeInsets.all(10),
                     child: Center(
-                        child: Text('View All News',style: TextStyle(color: Colors.white),)),
+                        child: Text(
+                      'View All News',
+                      style: TextStyle(color: Colors.white),
+                    )),
                   ),
-                  onTap: (){
+                  onTap: () {
                     //MR: navigate to next screen
-                    // bloc.navigateNext(widget)
+
+                    bloc.navigateNext(NewsListHome());
                   },
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
@@ -47,9 +52,12 @@ class HomeScreen extends StatelessWidget {
                     color: Colors.amber,
                     padding: EdgeInsets.all(10),
                     child: Center(
-                        child: Text('Add News',style: TextStyle(color: Colors.white),)),
+                        child: Text(
+                      'Add News',
+                      style: TextStyle(color: Colors.white),
+                    )),
                   ),
-                  onTap: (){
+                  onTap: () {
                     //MR: navigate to next screen
 
                     bloc.navigateNext(AddNewsScreen());

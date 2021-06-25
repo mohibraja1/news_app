@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/ui/SplashScreen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 void main() {
   runApp(MyApp());
