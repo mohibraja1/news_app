@@ -1,11 +1,9 @@
 import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'HomeScreen.dart';
+import 'package:news_app/ui/NewsListhome.dart';
 
 
 class SplashScreen extends StatelessWidget {
@@ -15,9 +13,9 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Firebase.initializeApp();
     Timer(
-        Duration(seconds: 3),
+        Duration(seconds: 1),
         () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => HomeScreen())));
+            builder: (BuildContext context) => NewsListHome())));
 
     return Scaffold(
       body: Center(

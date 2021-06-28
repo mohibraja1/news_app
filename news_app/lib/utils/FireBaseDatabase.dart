@@ -17,6 +17,8 @@ class MyFireBaseDatabase {
       KEY_NEWS_TITLE: newsModel.newsTitle,
       KEY_NEWS_DESCRIPTION: newsModel.newsDesctiption,
       KEY_NEWS_IMAGE: newsModel.imagePath,
+    }).then((value) => {
+      print('addEntryToFireBase success')
     });
   }
 
