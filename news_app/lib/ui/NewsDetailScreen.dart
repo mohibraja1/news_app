@@ -18,32 +18,38 @@ class _NewsDetailState extends State<NewsDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('News Detail'),
+        title: Text('News Detail',style: TextStyle(color: Colors.white)),
       ),
-      body: Column(
-        children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              "News title: " + newsModel.newsTitle,
-              style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
-              maxLines: 2,
-            ),
-          ),
+      body: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.all(11),
+          child: Column(
 
-          previewImage(),
+            children: [
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "News title: " + newsModel.newsTitle,
+                  style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+                  maxLines: 2,
+                ),
+              ),
 
-          Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              "News Description: " + newsModel.newsDesctiption,
-              style: TextStyle(fontSize: 15),
-              maxLines: 3,
-            ),
+              previewImage(),
+
+              Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "News Description: " + newsModel.newsDesctiption,
+                  style: TextStyle(fontSize: 15),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -52,7 +58,7 @@ class _NewsDetailState extends State<NewsDetailScreen> {
 
     if (newsModel.imagePath.isNotEmpty) {
 
-      return Container( margin : EdgeInsets.only(top: 10),child: Image.network(newsModel.imagePath));
+      return Container( margin : EdgeInsets.only(top: 20,bottom: 20),child: Image.network(newsModel.imagePath));
     } else
       return Container(
         height: 1,
