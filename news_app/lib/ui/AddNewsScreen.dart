@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -7,7 +8,7 @@ import 'package:news_app/models/NewsModel.dart';
 import 'package:news_app/repo/FireBaseDatabase.dart';
 import 'package:news_app/viewmodels/AddNewsScreenVM.dart';
 import 'package:stacked/stacked.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 final TAG = 'AddNewsScreen';
 
@@ -24,8 +25,10 @@ class _State extends State<AddNewsScreen> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
-  String _imageFilePath = "";
+  String _imageFilePath = '';
   final _picker = ImagePicker();
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +46,9 @@ class _State extends State<AddNewsScreen> {
         onModelReady: (viewModel) => viewModel.initialise(),
         builder: (context, viewModel, child) => Scaffold(
           appBar: AppBar(
+            iconTheme: IconThemeData(
+              color: Colors.white, // change your color here
+            ),
             title: Text(
               'Add News Page',
               style: TextStyle(color: Colors.white),
@@ -177,6 +183,7 @@ class _State extends State<AddNewsScreen> {
         viewModel.uploadImageToFirebase(File(pickedFile!.path));
 
     downloadLink.then((value) => {
+
           setState(() {
             print('value is $value');
             _imageFilePath = value;
@@ -184,21 +191,16 @@ class _State extends State<AddNewsScreen> {
         });
   }
 
-  Widget _previewImage(AddNewsScreenVM viewModel) {
+  _previewImage(AddNewsScreenVM viewModel) {
     if (_imageFilePath.isNotEmpty) {
       print(_imageFilePath);
 
-
-
       viewModel.shouldShowProgress(false);
-
-      return Container( margin : EdgeInsets.only(top: 20,bottom: 20),child: Image.network(_imageFilePath));
-
-    } else {
       return Container(
-        width: 1,
-        height: 1,
-      );
+          margin: EdgeInsets.only(top: 20, bottom: 20),
+          child: Image.network(_imageFilePath));
+    } else {
+      return Container(width: 1, height: 1);
     }
   }
 
@@ -212,4 +214,5 @@ class _State extends State<AddNewsScreen> {
       return Container();
     }
   }
+
 }

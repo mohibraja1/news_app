@@ -38,7 +38,7 @@ class BaseBlock {
   }
 
   toast(String message) {
-    printLog(message);
+    printLog('toast msg is = ' + message);
 
     return Fluttertoast.showToast(
         msg: message,

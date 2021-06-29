@@ -23,19 +23,25 @@ class _HomeState extends State<NewsListHome> {
       viewModelBuilder: () => NewsListScreenVM(),
       onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, viewModel, child) => Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              bloc.navigateNext(AddNewsScreen());
+            },
+            child: const Icon(Icons.add),
+            backgroundColor: Colors.amber,
+          ),
           appBar: AppBar(
-            title: Text('News List',style: TextStyle(color: Colors.white)),
+            title: Text('News List', style: TextStyle(color: Colors.white)),
           ),
           body: Stack(
             children: [
-
               addItems(context, viewModel, bloc),
-              Container(
+              // addFutureItems(context, viewModel, bloc),
+              /*Container(
                 margin: EdgeInsets.all(20),
                 child: Align(
                   alignment: Alignment.bottomRight,
                   child: ElevatedButton(
-
                     onPressed: () {
                       bloc.navigateNext(AddNewsScreen());
                     },
@@ -46,10 +52,65 @@ class _HomeState extends State<NewsListHome> {
                     ),
                   ),
                 ),
-              ),
-
+              ),*/
             ],
           )),
+    );
+  }
+
+  addFutureItems(BuildContext context, NewsListScreenVM viewModel,
+      NewsListScreenBloc bloc) {
+    return Container(
+      child: FutureBuilder(
+          future: viewModel.getNewsListFromFirebase(),
+          builder: (context, snapShot) {
+            if (!viewModel.isUpdatedOnce) {
+              return showProgressBar(!viewModel.isUpdatedOnce);
+            } else if (viewModel.newsList.isEmpty) {
+              return Center(
+                child: Text('No Data found yet'),
+              );
+            } else {
+              return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: viewModel.newsList.length,
+                  itemBuilder: (BuildContext context, int index) =>
+                      GestureDetector(
+                        child: Card(
+                          margin: EdgeInsets.only(
+                              left: 11, right: 11, top: 5, bottom: 5),
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                top: 5, bottom: 5, left: 12, right: 12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  "News title: " +
+                                      viewModel.newsList[index].newsTitle,
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      textBaseline: TextBaseline.alphabetic),
+                                  maxLines: 2,
+                                ),
+                                Text(
+                                  "News Description: " +
+                                      viewModel.newsList[index].newsDesctiption,
+                                  style: TextStyle(fontSize: 15),
+                                  maxLines: 3,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                          final item = viewModel.newsList[index];
+                          bloc.navigateNext(NewsDetailScreen(item));
+                        },
+                      ));
+            }
+          }),
     );
   }
 
@@ -78,15 +139,20 @@ class _HomeState extends State<NewsListHome> {
                       Text(
                         "News title: " + viewModel.newsList[index].newsTitle,
                         style: TextStyle(
+                            fontFamily: 'Raleway',
+                            fontWeight: FontWeight.w900,
                             fontSize: 20,
-                            fontWeight: FontWeight.bold,
                             textBaseline: TextBaseline.alphabetic),
                         maxLines: 2,
                       ),
                       Text(
                         "News Description: " +
                             viewModel.newsList[index].newsDesctiption,
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'Raleway',
+                            fontWeight: FontWeight.w300,
+                            textBaseline: TextBaseline.alphabetic),
                         maxLines: 3,
                       ),
                     ],
@@ -94,6 +160,7 @@ class _HomeState extends State<NewsListHome> {
                 ),
               ),
               onTap: () {
+
                 final item = viewModel.newsList[index];
                 bloc.navigateNext(NewsDetailScreen(item));
               },

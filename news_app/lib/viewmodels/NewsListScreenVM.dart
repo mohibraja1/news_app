@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:news_app/models/NewsModel.dart';
 import 'package:news_app/repo/FireBaseDatabase.dart';
+import 'package:news_app/ui/AddNewsScreen.dart';
 import 'package:news_app/viewmodels/BaseViewModel.dart';
 
 import 'package:firebase_database/firebase_database.dart';
@@ -22,6 +23,8 @@ class NewsListScreenVM extends BaseViewModel {
     });
   }
 
+  get _TAG => 'News List Screen VM';
+
   void _onNoteAdded(Event event) {
 
     notifyChange();
@@ -30,17 +33,20 @@ class NewsListScreenVM extends BaseViewModel {
   }
 
   initialise() {
+    log(_TAG + ' initialise method called');
     getNewsListFromFirebase();
   }
 
-  getNewsListFromFirebase() async {
+  Future<List<NewsModel>> getNewsListFromFirebase() async {
     _db.readAllNewsData().then(
         (value) => {
-          notifyChange(),
+          // notifyChange(),
           log('mvalue $value'),
           isUpdatedOnce = true,
           newsList = value,
          });
+
+    return newsList;
   }
 
 }

@@ -5,11 +5,8 @@ import 'package:news_app/repo/FireBaseDatabase.dart';
 
 class NewsListScreenBloc extends BaseBlock {
 
-  late MyFireBaseDatabase db;
-
-  NewsListScreenBloc(BuildContext context) : super(context) {
-    db = MyFireBaseDatabase();
-  }
-
-
+  NewsListScreenBloc(BuildContext context) : super(context){}
 }
+
+
+

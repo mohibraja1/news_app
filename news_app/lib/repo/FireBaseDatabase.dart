@@ -71,7 +71,7 @@ class MyFireBaseDatabase {
   }
 
   Future<List<NewsModel>> readAllNewsDataWhenChange() async {
-    print('readAllNewsData come in this function');
+    print('readAllNewsDataWhenChange come in this function');
 
     List<NewsModel> mList = <NewsModel>[];
 

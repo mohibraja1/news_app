@@ -1,27 +1,13 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Utils{
-
-  static double getScreenHeight(BuildContext context){
+class Utils {
+  static double getScreenHeight(BuildContext context) {
     return MediaQuery.of(context).size.height;
   }
 
-  static double getScreenWidth(BuildContext context){
+  static double getScreenWidth(BuildContext context) {
     return MediaQuery.of(context).size.width;
-  }
-   static toast(String toastMsg){
-
-     print(toastMsg);
-
-    /*Fluttertoast.showToast(
-        msg: toastMsg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        fontSize: 16.0
-    );*/
   }
 
   static Future<void> showMyDialog(BuildContext context) async {

@@ -1,31 +1,65 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:news_app/viewmodels/NewsListScreenVM.dart';
-import 'package:stacked/stacked.dart';
+import 'package:news_app/ui/SplashScreen.dart';
 
-class MyTest extends StatelessWidget {
+import '../main.dart';
+
+class Spll extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _MyAppState();
+  }
+}
+
+class _MyAppState extends State<Spll> {
+  NetworkImage networkImage = NetworkImage('https://picsum.photos/250?image=9');
+  bool ready = false;
+
+  void _updateImage(ImageInfo imageInfo, bool synchronousCall) {
+    print("ready");
+
+
+    setState(() {
+      ready = true;
+    });
+  }
+
+  @override
+  void initState() {
+    ImageStream imageStream =
+    networkImage.resolve(createLocalImageConfiguration(context));
+    final ImageStreamListener listener = ImageStreamListener(_updateImage);
+    imageStream.addListener(listener);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final title = 'Fade in images';
 
-    return ViewModelBuilder<NewsListScreenVM>.reactive(
-      viewModelBuilder: () => NewsListScreenVM(),
-      onModelReady: (viewModel) => viewModel.initialise(),
-
-      builder: (context, viewModel, child) => Scaffold(
+    return MaterialApp(
+      title: title,
+      home: Scaffold(
         appBar: AppBar(
-          title: Text('rwar',style: TextStyle(color: Colors.white)),
+          title: Text(title),
         ),
-        body: Stack(
-          children: [
-            Text('My first text'),
-            Align(
-              child: GestureDetector(child: Text('My second text'),onTap: (){
-
-
-
-              },),
-              alignment: Alignment.bottomRight,
+        body: Column(
+          children: <Widget>[
+            ready == true
+                ? Container(
+              child: Text("CircularProgressIndicator disappear"),
+            )
+                : Center(child: CircularProgressIndicator()),
+            FadeInImage(
+              placeholder: NetworkImage("https://picsum.photos/250?image=9"),
+              image: networkImage,
             ),
+            /*  Center(
+              child: FadeInImage.memoryNetwork(
+                placeholder: kTransparentImage,
+                image: 'https://picsum.photos/250?image=9',
+              ),
+            ),*/
           ],
         ),
       ),

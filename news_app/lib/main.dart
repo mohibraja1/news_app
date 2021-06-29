@@ -14,6 +14,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'News App',
       theme: ThemeData(
+        iconTheme: IconThemeData(
+          color: Colors.white, // change your color here
+        ),
         primaryColor: Colors.amber,
         primarySwatch: Colors.blue,
 

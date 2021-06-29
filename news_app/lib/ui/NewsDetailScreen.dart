@@ -21,6 +21,10 @@ class _NewsDetailState extends State<NewsDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
+
+        iconTheme: IconThemeData(
+          color: Colors.white, // change your color here
+        ),
         title: Text('News Detail',style: TextStyle(color: Colors.white)),
       ),
       body: SingleChildScrollView(
