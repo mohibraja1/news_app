@@ -6,9 +6,9 @@ import 'package:news_app/blocs/AddNewsScreen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:news_app/models/NewsModel.dart';
 import 'package:news_app/repo/FireBaseDatabase.dart';
+import 'package:news_app/utils/Utils.dart';
 import 'package:news_app/viewmodels/AddNewsScreenVM.dart';
 import 'package:stacked/stacked.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 final TAG = 'AddNewsScreen';
 
@@ -27,8 +27,6 @@ class _State extends State<AddNewsScreen> {
 
   String _imageFilePath = '';
   final _picker = ImagePicker();
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -162,9 +160,10 @@ class _State extends State<AddNewsScreen> {
     }
 
     mBloc.printLog('starting adding data on firebase');
+    final timeStamp = Utils().getFormatedTimeStamp();
 
-    final newsModel = NewsModel(
-        titleController.text, descriptionController.text, _imageFilePath);
+    List<String> commentList = [];
+    final newsModel = NewsModel(timeStamp,titleController.text, descriptionController.text, _imageFilePath,0,commentList);
 
     viewModel.addNewsRecordToFirebaseDB(newsModel).then((value) => {
           if (value)
@@ -183,7 +182,6 @@ class _State extends State<AddNewsScreen> {
         viewModel.uploadImageToFirebase(File(pickedFile!.path));
 
     downloadLink.then((value) => {
-
           setState(() {
             print('value is $value');
             _imageFilePath = value;
@@ -214,5 +212,4 @@ class _State extends State<AddNewsScreen> {
       return Container();
     }
   }
-
 }

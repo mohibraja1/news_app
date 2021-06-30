@@ -106,6 +106,7 @@ class _HomeState extends State<NewsListHome> {
                         ),
                         onTap: () {
                           final item = viewModel.newsList[index];
+                          log('clicked item time stamp = ${item.timeStamp}');
                           bloc.navigateNext(NewsDetailScreen(item));
                         },
                       ));
@@ -170,12 +171,12 @@ class _HomeState extends State<NewsListHome> {
   }
 
   showProgressBar(bool showProgress) {
-    log('$TAG showProgressBar');
+    log('$TAG comes in show Progress Bar fun');
     if (showProgress) {
-      log('$TAG showing');
+      log('$TAG showing pb');
       return Center(child: CircularProgressIndicator());
     } else {
-      log('$TAG not showing');
+      log('$TAG not showing pb');
       return Container();
     }
   }

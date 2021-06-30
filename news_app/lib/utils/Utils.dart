@@ -1,13 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Utils {
   static double getScreenHeight(BuildContext context) {
-    return MediaQuery.of(context).size.height;
+    return MediaQuery
+        .of(context)
+        .size
+        .height;
   }
 
   static double getScreenWidth(BuildContext context) {
-    return MediaQuery.of(context).size.width;
+    return MediaQuery
+        .of(context)
+        .size
+        .width;
   }
 
   static Future<void> showMyDialog(BuildContext context) async {
@@ -32,4 +39,22 @@ class Utils {
       },
     );
   }
+
+  String getFormatedTimeStamp() {
+
+    DateTime dateToday =new DateTime.now();
+
+    final format = 'yyyyMMdd-hhmmss';
+
+    var formattedDate = DateFormat(format).format(dateToday);
+
+    print(formattedDate); // 2021-06-24
+
+    if (formattedDate.isEmpty) {
+      throw('this can not be empty');
+    }
+    return formattedDate;
+
+  }
+
 }

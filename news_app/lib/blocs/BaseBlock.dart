@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/utils/Utils.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:date_time_format/date_time_format.dart';
 
 class BaseBlock {
   late BuildContext context;
@@ -50,7 +51,7 @@ class BaseBlock {
         fontSize: 16.0);
   }
 
-/*String unixToStringFormat1(int timestamp, String format) {
+  String unixToStringFormat1(int timestamp, String format) {
     var date = new DateTime.fromMicrosecondsSinceEpoch(timestamp * 1000);
     return date.format(format);
   }
@@ -59,6 +60,20 @@ class BaseBlock {
     var time = int.parse(timestamp);
     var date = new DateTime.fromMicrosecondsSinceEpoch(time * 1000);
     return date.format(format);
-  }*/
+  }
+
+  String getFormatedTimeStamp1( String format) {
+    final time = DateTime.now().microsecond;
+    var date = new DateTime.fromMicrosecondsSinceEpoch(time);
+    return date.format(format);
+  }
+
+  String getFormatedTimeStamp( ) {
+
+    var date = DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecond * 1000);
+
+    String format='yyyyMMddhhmmss';
+    return date.format(format);
+  }
 
 }

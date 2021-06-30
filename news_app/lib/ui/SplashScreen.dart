@@ -3,19 +3,17 @@ import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:news_app/ui/NewsListhome.dart';
 
+import 'TempHome.dart';
 
 class SplashScreen extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
     Firebase.initializeApp();
     Timer(
         Duration(seconds: 1),
-        () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => NewsListHome())));
+        () => Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (BuildContext context) => TempHome())));
 
     return Scaffold(
       body: Center(

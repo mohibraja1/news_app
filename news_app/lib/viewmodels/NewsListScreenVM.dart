@@ -19,7 +19,7 @@ class NewsListScreenVM extends BaseViewModel {
 
     _onNoteAddedSubscription =
         _db.getFireBaseObj().onChildAdded.listen((event) {
-      _onNoteAdded(event);
+      // _onNoteAdded(event);
     });
   }
 
@@ -40,8 +40,8 @@ class NewsListScreenVM extends BaseViewModel {
   Future<List<NewsModel>> getNewsListFromFirebase() async {
     _db.readAllNewsData().then(
         (value) => {
-          // notifyChange(),
-          log('mvalue $value'),
+          notifyChange(),
+          log('isUpdatedOnce yes  & getting value $value'),
           isUpdatedOnce = true,
           newsList = value,
          });
