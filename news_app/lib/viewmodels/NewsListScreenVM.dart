@@ -14,22 +14,21 @@ class NewsListScreenVM extends BaseViewModel {
   bool isUpdatedOnce = false;
 
   late StreamSubscription<Event> _onNoteAddedSubscription;
+
   NewsListScreenVM() {
     _db = MyFireBaseDatabase();
 
     _onNoteAddedSubscription =
         _db.getFireBaseObj().onChildAdded.listen((event) {
-      // _onNoteAdded(event);
+      _onNoteAdded(event);
     });
   }
 
   get _TAG => 'News List Screen VM';
 
   void _onNoteAdded(Event event) {
-
     notifyChange();
-    newsList.add(new NewsModel.fromEventObject(event.snapshot));
-
+    newsList.add(NewsModel.fromEventObject(event.snapshot));
   }
 
   initialise() {
@@ -38,15 +37,14 @@ class NewsListScreenVM extends BaseViewModel {
   }
 
   Future<List<NewsModel>> getNewsListFromFirebase() async {
-    _db.readAllNewsData().then(
-        (value) => {
+    _db.readAllNewsData().then((value) => {
           notifyChange(),
           log('isUpdatedOnce yes  & getting value $value'),
           isUpdatedOnce = true,
           newsList = value,
-         });
+
+      log('${newsList.length} is size of list')});
 
     return newsList;
   }
-
 }

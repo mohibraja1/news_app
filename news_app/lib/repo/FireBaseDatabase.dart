@@ -1,24 +1,19 @@
+import 'dart:collection';
 import 'dart:developer';
 import 'dart:io';
 import 'dart:math';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
+
 import 'package:news_app/models/NewsModel.dart';
+import 'package:news_app/utils/AppConstants.dart';
 import 'package:news_app/utils/Utils.dart';
 
 class MyFireBaseDatabase {
   final TAG = 'MyFireBaseDatabase';
   static DatabaseReference _dbRef =
       FirebaseDatabase.instance.reference().child('MyNews');
-
-  final KEY_NEWS_TIME_STAMP = 'timeStamp';
-  final KEY_NEWS_TITLE = 'NewsTitle';
-  final KEY_NEWS_DESCRIPTION = 'NewsDescription';
-  final KEY_NEWS_IMAGE = 'NewsImage';
-  final KEY_LIKES = 'totalLikes';
-  final _KEY_COMMENTS = 'Comments';
 
   DatabaseReference getFireBaseObj() {
     return _dbRef;
@@ -30,11 +25,11 @@ class MyFireBaseDatabase {
     await _dbRef
         .child(newsModel.timeStamp)
         .set({
-          KEY_NEWS_TIME_STAMP: newsModel.timeStamp,
-          KEY_NEWS_TITLE: newsModel.newsTitle,
-          KEY_NEWS_DESCRIPTION: newsModel.newsDesctiption,
-          KEY_NEWS_IMAGE: newsModel.imagePath,
-          KEY_LIKES: newsModel.totalLikes,
+          AppConstants.KEY_NEWS_TIME_STAMP: newsModel.timeStamp,
+          AppConstants.KEY_NEWS_TITLE: newsModel.newsTitle,
+          AppConstants.KEY_NEWS_DESCRIPTION: newsModel.newsDesctiption,
+          AppConstants.KEY_NEWS_IMAGE: newsModel.imagePath,
+          AppConstants.KEY_LIKES: newsModel.totalLikes,
         })
         .then((value) => {
               print('addEntryToFireBase success'),
@@ -54,7 +49,7 @@ class MyFireBaseDatabase {
 
     List<NewsModel> mList = [];
 
-    await _dbRef.once().then((DataSnapshot snapshot) async{
+    await _dbRef.once().then((DataSnapshot snapshot) async {
       if (snapshot == null || snapshot.value == null) {
         return mList;
       }
@@ -62,21 +57,53 @@ class MyFireBaseDatabase {
       values.forEach((key, values) async {
         log(values);
 
-        final timeStamp = values[KEY_NEWS_TIME_STAMP];
-        final title = values[KEY_NEWS_TITLE];
-        final description = values[KEY_NEWS_DESCRIPTION];
-        final imagePath = values[KEY_NEWS_IMAGE];
-        final likes = values[KEY_LIKES];
+        final timeStamp = values[AppConstants.KEY_NEWS_TIME_STAMP];
+        final title = values[AppConstants.KEY_NEWS_TITLE];
+        final description = values[AppConstants.KEY_NEWS_DESCRIPTION];
+        final imagePath = values[AppConstants.KEY_NEWS_IMAGE];
+        final likes = values[AppConstants.KEY_LIKES];
 
         List<String> commentList = [];
+        List<Object?> th = [];
 
+        Map<dynamic, dynamic> comSnap;
 
+        log('came try section for comments');
 
+        DatabaseReference mReef =
+            _dbRef.child(timeStamp).child(AppConstants.KEY_COMMENTS);
 
-        if (timeStamp.toString().isEmpty) {
-          throw('time stampp can not be empy');
+        rootFirebaseIsExists(mReef).then((value) async => {
+              if (value)
+                {
+                  await mReef.once().then((value) async => {
+                        log('the value is = $value'),
+                        if (value != null && value.value != null)
+                          {
+                            th = value.value,
+                            log(th),
+                            th.forEach((element) {
+                              if (element != null) {
+                                commentList.add(element.toString());
+                              }
+                            }),
 
-        }
+                            /*comSnap.forEach((key,value) {
+
+                      log('this is  val is $value  key $key');
+                      commentList.add(value.toString());
+                    }),*/
+                            commentList.forEach((element) {
+                              log('element is = ' + element);
+                            })
+                          },
+                      })
+                }
+              else
+                {log('${mReef} not exist')}
+            });
+
+        log('reading data and cometns  = ${commentList.length}');
 
         final newsmodel = NewsModel(
             timeStamp, title, description, imagePath, likes, commentList);
@@ -93,7 +120,7 @@ class MyFireBaseDatabase {
     return mList;
   }
 
- /* Future<List<NewsModel>> readAllNewsDataWhenChange() async {
+  /* Future<List<NewsModel>> readAllNewsDataWhenChange() async {
     print('readAllNewsDataWhenChange come in this function');
 
     List<NewsModel> mList = <NewsModel>[];
@@ -170,16 +197,15 @@ class MyFireBaseDatabase {
 
     var isSuccess = false;
 
-    final path = 'MyNews/${newsModel.timeStamp}/${_KEY_COMMENTS}';
+    final path = 'MyNews/${newsModel.timeStamp}/${AppConstants.KEY_COMMENTS}';
     log('time stamp = ${newsModel.timeStamp}');
     log('time title = ${newsModel.newsTitle}');
     log('path is $path');
+
     DatabaseReference mRef =
         FirebaseDatabase.instance.reference().child(path).reference();
 
-    await mRef.push().set({
-      commentNumber.toString(): comment,
-    }).then((_) {
+    await mRef.child(commentNumber.toString()).set(comment).then((_) {
       print('add Comment success');
       isSuccess = true;
     });
@@ -203,19 +229,16 @@ class MyFireBaseDatabase {
         FirebaseDatabase.instance.reference().child(path).reference();
 
     if (newsModel.timeStamp.isEmpty) {
-
       log('timeStamp22 = $timeStamp22');
       throw ('time stamp can not be empty');
     }
 
     await mRef.reference().set({
-
-      KEY_NEWS_TIME_STAMP: newsModel.timeStamp,
-      KEY_NEWS_TITLE: newsModel.newsTitle,
-      KEY_NEWS_DESCRIPTION: newsModel.newsDesctiption,
-      KEY_NEWS_IMAGE: newsModel.imagePath,
-
-      KEY_LIKES: add,
+      AppConstants.KEY_NEWS_TIME_STAMP: newsModel.timeStamp,
+      AppConstants.KEY_NEWS_TITLE: newsModel.newsTitle,
+      AppConstants.KEY_NEWS_DESCRIPTION: newsModel.newsDesctiption,
+      AppConstants.KEY_NEWS_IMAGE: newsModel.imagePath,
+      AppConstants.KEY_LIKES: add,
     }).then((_) {
       print('add Comment success');
       isSuccess = true;
@@ -248,6 +271,12 @@ class MyFireBaseDatabase {
 
     return isSuccess;
   }*/
+
+  Future<bool> rootFirebaseIsExists(DatabaseReference databaseReference) async {
+    DataSnapshot snapshot = await databaseReference.once();
+
+    return snapshot != null;
+  }
 }
 
 void log(Object obj) {

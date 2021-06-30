@@ -1,25 +1,14 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:news_app/utils/AppConstants.dart';
 
 class NewsModel {
-
-  final KEY_NEWS_TITLE = 'NewsTitle';
-  final KEY_NEWS_DESCRIPTION = 'NewsDescription';
-  final KEY_NEWS_IMAGE = 'NewsImage';
-  final KEY_LIKES = 'totalLikes';
-  final _KEY_COMMENTS = 'Comments';
-
   String timeStamp = '';
-  String  newsTitle='', newsDesctiption ='', imagePath='';
-  int totalLikes=0;
+  String newsTitle = '', newsDesctiption = '', imagePath = '';
+  int totalLikes = 0;
   List<String> commentList = [];
 
-
-  NewsModel(
-      this.timeStamp,
-      this.newsTitle,
-      this.newsDesctiption,
-      this.imagePath,
-      this.totalLikes, this.commentList);
+  NewsModel(this.timeStamp, this.newsTitle, this.newsDesctiption,
+      this.imagePath, this.totalLikes, this.commentList);
 
   // Map<String, dynamic> toMap() {
   //   var map = Map<String, dynamic>();
@@ -39,42 +28,26 @@ class NewsModel {
     this.totalLikes = map[KEY_LIKES];
   }*/
 
-  NewsModel.fromEventObject(DataSnapshot snapshot) {
-    this.newsTitle = snapshot.value[KEY_NEWS_TITLE];
-    this.newsDesctiption = snapshot.value[KEY_NEWS_DESCRIPTION];
-    this.imagePath = snapshot.value[KEY_NEWS_IMAGE];
+  static NewsModel fromEventObject(DataSnapshot snapshot) {
+    var timeStamp = snapshot.value[AppConstants.KEY_NEWS_TIME_STAMP];
+    var newsTitle = snapshot.value[AppConstants.KEY_NEWS_TITLE];
+    var newsDesctiption = snapshot.value[AppConstants.KEY_NEWS_DESCRIPTION];
+    var imagePath = snapshot.value[AppConstants.KEY_NEWS_IMAGE];
+    var totalLikes = snapshot.value[AppConstants.KEY_LIKES];
 
-    /*int likes = 0;
-    try {
-      if (snapshot.value != null) {
+    List<String> commentList = [];
 
-        DataSnapshot commentSnap = snapshot.value[KEY_LIKES];
-        Map<dynamic, dynamic> likeslisat = commentSnap.value;
-
-        likes =likeslisat.length;
-        this.totalLikes = likes;
-
-      }
-
-
-    } on Exception catch (e) {
-      print('exceaptinn came  $e');
-      this.totalLikes = likes;
-
-    }
-
-
-    try {
-      DataSnapshot commentSnap = snapshot.value[_KEY_COMMENTS];
-      Map<dynamic, dynamic> comments = commentSnap.value;
-
-      commentList.clear();
-      comments.forEach((key, value) {
-        commentList.add(value);
+    if (snapshot.value[AppConstants.KEY_COMMENTS] != null) {
+      List<Object?> temp = snapshot.value[AppConstants.KEY_COMMENTS];
+      temp.forEach((element) {
+        if (element != null && element is String) {
+          commentList.add(element.toString());
+        }
       });
-    } on Exception catch (e) {
-      print('exceaptin n came  $e');
-    }*/
-  }
+    }
+    NewsModel newsModel = NewsModel(timeStamp, newsTitle, newsDesctiption,
+        imagePath, totalLikes, commentList);
 
+    return newsModel;
+  }
 }

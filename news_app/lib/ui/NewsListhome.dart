@@ -36,23 +36,6 @@ class _HomeState extends State<NewsListHome> {
           body: Stack(
             children: [
               addItems(context, viewModel, bloc),
-              // addFutureItems(context, viewModel, bloc),
-              /*Container(
-                margin: EdgeInsets.all(20),
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      bloc.navigateNext(AddNewsScreen());
-                    },
-                    child: Text('Add More News'),
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.amber,
-                      padding: EdgeInsets.all(20), // Set padding
-                    ),
-                  ),
-                ),
-              ),*/
             ],
           )),
     );

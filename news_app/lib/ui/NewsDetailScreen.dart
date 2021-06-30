@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/models/NewsModel.dart';
+import 'package:news_app/repo/FireBaseDatabase.dart';
 import 'package:news_app/viewmodels/NewsDetailScreenVM.dart';
 import 'package:stacked/stacked.dart';
 
@@ -133,7 +134,12 @@ class _NewsDetailState extends State<NewsDetailScreen> {
   }
 
   addCommentsSection(NewsDetailScreenVM viewModel) {
+
+    log('addCommentsSection comes inside and list  = ${viewModel.newsModel.commentList.length}');
+
     if (viewModel.newsModel.commentList.isEmpty) {
+
+      log('addCommentsSection list is empty');
       return Container();
     } else {
       return ListView.builder(

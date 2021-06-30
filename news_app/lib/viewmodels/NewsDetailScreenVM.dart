@@ -23,40 +23,37 @@ class NewsDetailScreenVM extends BaseViewModel {
     _db = MyFireBaseDatabase();
 
     _onNoteAddedSubscription =
-        _db
-            .getFireBaseObj()
-            .onChildAdded
-            .listen((event) {
-          _onNoteAdded(event);
-        });
+        _db.getFireBaseObj().onChildAdded.listen((event) {
+      _onNoteAdded(event);
+    });
+
+    log('comments list  is =${newsModel.commentList.length}');
   }
 
   get _TAG => 'News List Screen VM';
 
   void _onNoteAdded(Event event) {
+    newsList.add(NewsModel.fromEventObject(event.snapshot));
     notifyChange();
-    newsList.add(new NewsModel.fromEventObject(event.snapshot));
   }
 
   Future<List<NewsModel>> getNewsListFromFirebase() async {
-    _db.readAllNewsData().then((value) =>
-    {
-      notifyChange(),
-      log('mvalue $value'),
-      isUpdatedOnce = true,
-      newsList = value,
-    });
+    _db.readAllNewsData().then((value) => {
+          notifyChange(),
+          log('mvalue $value'),
+          isUpdatedOnce = true,
+          newsList = value,
+        });
 
     return newsList;
   }
 
-  Future<bool> addLikeToNews( ) {
-    return _db.addLikeToNews(newsModel,newsModel.timeStamp);
+  Future<bool> addLikeToNews() {
+    return _db.addLikeToNews(newsModel, newsModel.timeStamp);
   }
 
   void updateTotalLike(int addValue) {
-
-    final addCount  = newsModel.totalLikes + addValue;
+    final addCount = newsModel.totalLikes + addValue;
 
     log(' likes are  =$addCount');
 
@@ -71,18 +68,11 @@ class NewsDetailScreenVM extends BaseViewModel {
     }
 
     log('final like text  = $totalLikText');
-
   }
 
   addComment(String comment) {
-    _db.addComment(newsModel, comment).then((value) =>
-    {
-
-      if (value) {
-        notifyChange(),
-        newsModel.commentList.insert(0, comment)
-
-      }
-    });
+    _db.addComment(newsModel, comment).then((value) => {
+          if (value) {notifyChange(), newsModel.commentList.insert(0, comment)}
+        });
   }
 }
