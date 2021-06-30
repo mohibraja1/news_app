@@ -1,6 +1,6 @@
 
 
-class AppConstants{
+abstract class AppConstants{
 
   static final KEY_NEWS_TIME_STAMP = 'timeStamp';
   static final KEY_NEWS_TITLE = 'NewsTitle';

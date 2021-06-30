@@ -29,7 +29,7 @@ class SplashScreen extends StatelessWidget {
             ),
             Container(
               margin: const EdgeInsets.only(top: 40.0),
-              child: Text("eZy Distance calculator"),
+              child: Text("News App"),
             )
           ],
         ),

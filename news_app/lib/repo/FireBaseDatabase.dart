@@ -1,7 +1,4 @@
-import 'dart:collection';
-import 'dart:developer';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -65,8 +62,6 @@ class MyFireBaseDatabase {
 
         List<String> commentList = [];
         List<Object?> th = [];
-
-        Map<dynamic, dynamic> comSnap;
 
         log('came try section for comments');
 
@@ -233,44 +228,13 @@ class MyFireBaseDatabase {
       throw ('time stamp can not be empty');
     }
 
-    await mRef.reference().set({
-      AppConstants.KEY_NEWS_TIME_STAMP: newsModel.timeStamp,
-      AppConstants.KEY_NEWS_TITLE: newsModel.newsTitle,
-      AppConstants.KEY_NEWS_DESCRIPTION: newsModel.newsDesctiption,
-      AppConstants.KEY_NEWS_IMAGE: newsModel.imagePath,
-      AppConstants.KEY_LIKES: add,
-    }).then((_) {
+    await mRef.child(AppConstants.KEY_LIKES).set(add).then((_) {
       print('add Comment success');
       isSuccess = true;
     });
 
     return isSuccess;
   }
-
-/*Future<bool> addLikeToNews(NewsModel newsModel) async {
-    final add = newsModel.totalLikes + 1;
-
-    log('$add adding to firebase');
-    log('${newsModel.newsTitle} is news titile');
-
-    var isSuccess = false;
-
-    final mRef = FirebaseDatabase.instance
-        .reference()
-        .child('MyNews')
-        .child(newsModel.timeStamp)
-        .child(KEY_LIKES)
-        .reference();
-
-    await mRef.set({
-      KEY_LIKES,add.toString()
-    }).then((_) {
-      print('add Like To News success');
-      isSuccess = true;
-    });
-
-    return isSuccess;
-  }*/
 
   Future<bool> rootFirebaseIsExists(DatabaseReference databaseReference) async {
     DataSnapshot snapshot = await databaseReference.once();

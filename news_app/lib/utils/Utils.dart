@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Utils {
+
   static double getScreenHeight(BuildContext context) {
     return MediaQuery
         .of(context)

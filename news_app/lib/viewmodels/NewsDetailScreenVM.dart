@@ -70,9 +70,15 @@ class NewsDetailScreenVM extends BaseViewModel {
     log('final like text  = $totalLikText');
   }
 
-  addComment(String comment) {
-    _db.addComment(newsModel, comment).then((value) => {
-          if (value) {notifyChange(), newsModel.commentList.insert(0, comment)}
-        });
+
+  Future<bool> addComment(String comment) async {
+
+    final fortune = _db.addComment(newsModel, comment);
+    fortune.then((value) => {
+
+      if (value) {notifyChange(),
+        newsModel.commentList.insert(0, comment)}
+    });
+    return fortune;
   }
 }
