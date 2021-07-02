@@ -33,8 +33,8 @@ class NewsDetailScreenVM extends BaseViewModel {
   get _TAG => 'News List Screen VM';
 
   void _onNoteAdded(Event event) {
-    newsList.add(NewsModel.fromEventObject(event.snapshot));
     notifyChange();
+    newsList.add(NewsModel.fromEventObject(event.snapshot));
   }
 
   Future<List<NewsModel>> getNewsListFromFirebase() async {

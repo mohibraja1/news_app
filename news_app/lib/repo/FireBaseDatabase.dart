@@ -63,12 +63,11 @@ class MyFireBaseDatabase {
         final reporterName = values[AppConstants.KEY_REPORTER_NAME];
 
         List<String> commentList = [];
-        List<Object?> th = [];
+        List<Object?> objList = [];
 
         log('came try section for comments');
 
-        DatabaseReference mReef =
-            _dbRef.child(timeStamp).child(AppConstants.KEY_COMMENTS);
+        DatabaseReference mReef = _dbRef.child(timeStamp).child(AppConstants.KEY_COMMENTS);
 
         rootFirebaseIsExists(mReef).then((value) async => {
               if (value)
@@ -77,19 +76,13 @@ class MyFireBaseDatabase {
                         log('the value is = $value'),
                         if (value != null && value.value != null)
                           {
-                            th = value.value,
-                            log(th),
-                            th.forEach((element) {
+                            objList = value.value,
+                            log(objList),
+                            objList.forEach((element) {
                               if (element != null) {
                                 commentList.add(element.toString());
                               }
                             }),
-
-                            /*comSnap.forEach((key,value) {
-
-                      log('this is  val is $value  key $key');
-                      commentList.add(value.toString());
-                    }),*/
                             commentList.forEach((element) {
                               log('element is = ' + element);
                             })
@@ -117,7 +110,7 @@ class MyFireBaseDatabase {
     return mList;
   }
 
-  /* Future<List<NewsModel>> readAllNewsDataWhenChange() async {
+   Future<List<NewsModel>> readAllNewsDataWhenChange() async {
     print('readAllNewsDataWhenChange come in this function');
 
     List<NewsModel> mList = <NewsModel>[];
@@ -125,41 +118,52 @@ class MyFireBaseDatabase {
     await _dbRef.once().then((DataSnapshot snapshot) {
       Map<dynamic, dynamic> values = snapshot.value;
       values.forEach((key, values) {
-        final title = values[KEY_NEWS_TITLE];
-        final description = values[KEY_NEWS_DESCRIPTION];
-        final imagePath = values[KEY_NEWS_IMAGE];
-        final timeStamp = values[KEY_NEWS_TIME_STAMP];
+        final title = values[AppConstants.KEY_NEWS_TITLE];
+        final description = values[AppConstants.KEY_NEWS_DESCRIPTION];
+        final imagePath = values[AppConstants.KEY_NEWS_IMAGE];
+        final timeStamp = values[AppConstants.KEY_NEWS_TIME_STAMP];
+        final reporterName = values[AppConstants.KEY_REPORTER_NAME];
+        final likes = values[AppConstants.KEY_LIKES];
 
-        int likes = 0;
-        try {
-          DataSnapshot commentSnap = values[KEY_LIKES];
-          Map<dynamic, dynamic> likeslisat = commentSnap.value;
 
-          likes = likeslisat.length;
-        } on Exception catch (e) {
-          print('exceaptinn came  $e');
-        }
 
         List<String> commentList = [];
+        List<Object?> objList = [];
 
-        try {
-          DataSnapshot commentSnap = values[_KEY_COMMENTS];
-          Map<dynamic, dynamic> comments = commentSnap.value;
+        DatabaseReference mReef = _dbRef.child(timeStamp).child(AppConstants.KEY_COMMENTS);
 
-          comments.forEach((key, value) {
-            commentList.add(value);
-          });
-        } on Exception catch (e) {
-          print('exceaptinn came  $e');
-        }
+        rootFirebaseIsExists(mReef).then((value) async => {
+          if (value)
+            {
+              await mReef.once().then((value) async => {
+                log('the value is = $value'),
+                if (value != null && value.value != null)
+                  {
+                    objList = value.value,
+                    log(objList),
+                    objList.forEach((element) {
+                      if (element != null) {
+                        commentList.add(element.toString());
+                      }
+                    }),
+                    commentList.forEach((element) {
+                      log('element is = ' + element);
+                    })
+                  },
+              })
+            }
+          else
+            {log('${mReef} not exist')}
+        });
 
+        log('reading data and cometns  = ${commentList.length}');
         if (timeStamp.toString().isEmpty) {
           throw('time stampp can not be empy');
 
         }
 
         final newsmodel = NewsModel(timeStamp, title, description, imagePath,
-            likes, commentList.reversed.toList());
+            likes, commentList.reversed.toList(),reporterName);
 
         // final newsmodel = NewsModel.fromEventObject(values);
         mList.add(newsmodel);
@@ -171,7 +175,7 @@ class MyFireBaseDatabase {
     });
 
     return mList;
-  }*/
+  }
 
   Future<String> uploadImageToFirebase(File file1) async {
     String data = "helloworld";

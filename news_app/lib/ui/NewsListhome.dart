@@ -36,15 +36,33 @@ class _HomeState extends State<NewsListHome> {
             backgroundColor: Colors.amber,
           ),
           appBar: AppBar(
+            iconTheme: IconThemeData(color: Colors.white),
+            actions: [
+              PopupMenuButton(
+
+                  color: Colors.white,
+                  itemBuilder: (context) => [
+                        PopupMenuItem(
+                          child: GestureDetector(
+                              onTap: () {
+                                User? user = FirebaseAuth.instance.currentUser;
+
+                                if (user == null) {
+                                  bloc.toast('No User found');
+                                } else {
+                                  signout();
+                                }
+                              },
+                              child: Text("Signout")),
+                          value: 1,
+                        ),
+                      ])
+            ],
             title: Text('World News', style: TextStyle(color: Colors.white)),
           ),
           body: Stack(
             children: [
               addItems(context, viewModel, bloc),
-              GestureDetector(onTap : (){
-                 signout();
-              },child: Text('Clear data')),
-
             ],
           )),
     );
@@ -185,8 +203,8 @@ class _HomeState extends State<NewsListHome> {
     } else {
       log('login first than go farward');
 
-
-      var results = await Navigator.of(context).push(new MaterialPageRoute<dynamic>(
+      var results =
+          await Navigator.of(context).push(new MaterialPageRoute<dynamic>(
         builder: (BuildContext context) {
           return new SignInPage();
         },
@@ -199,16 +217,15 @@ class _HomeState extends State<NewsListHome> {
         if (value) {
           bloc.navigateNext(AddNewsScreen());
         }
-      }else{
+      } else {
         log('controls hould ');
       }
     }
   }
 
   signout() async {
-    await FirebaseAuth.instance.signOut().then((value) => {
-
-      log('signout reult  ')
-    });
+    await FirebaseAuth.instance
+        .signOut()
+        .then((value) => {log('signout reult  ')});
   }
 }

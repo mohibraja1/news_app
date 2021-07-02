@@ -18,8 +18,7 @@ class NewsListScreenVM extends BaseViewModel {
   NewsListScreenVM() {
     _db = MyFireBaseDatabase();
 
-    _onNoteAddedSubscription =
-        _db.getFireBaseObj().onChildAdded.listen((event) {
+    _onNoteAddedSubscription = _db.getFireBaseObj().onChildAdded.listen((event) {
       _onNoteAdded(event);
     });
   }
@@ -27,8 +26,11 @@ class NewsListScreenVM extends BaseViewModel {
   get _TAG => 'News List Screen VM';
 
   void _onNoteAdded(Event event) {
-    notifyChange();
+
+    log('come in fun _onNoteAdded');
+    // notifyChange();
     newsList.add(NewsModel.fromEventObject(event.snapshot));
+
   }
 
   initialise() {
@@ -44,6 +46,18 @@ class NewsListScreenVM extends BaseViewModel {
           newsList = value,
 
       log('${newsList.length} is size of list')});
+
+    return newsList;
+  }
+
+  Future<List<NewsModel>> readAllNewsDataWhenChange() async {
+    /*_db.readAllNewsDataWhenChange().then((value) => {
+          notifyChange(),
+          log('isUpdatedOnce yes  & getting value $value'),
+          isUpdatedOnce = true,
+          newsList = value,
+
+      log('${newsList.length} is size of list')});*/
 
     return newsList;
   }
