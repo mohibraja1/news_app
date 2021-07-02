@@ -4,6 +4,15 @@ import 'package:intl/intl.dart';
 
 class Utils {
 
+
+  static bool isEmailValid(String email) {
+
+    bool emailValid = RegExp(
+        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(email);
+
+    return emailValid;
+  }
   static double getScreenHeight(BuildContext context) {
     return MediaQuery
         .of(context)

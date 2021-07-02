@@ -1,47 +1,64 @@
 import 'dart:collection';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/blocs/BaseBlock.dart';
 import 'package:news_app/repo/FireBaseDatabase.dart';
 import 'package:news_app/repo/authentication_service.dart';
-import 'package:news_app/ui/sign_up_form.dart';
 import 'package:news_app/utils/Utils.dart';
 import 'package:provider/provider.dart';
 
-class SignInPage extends StatelessWidget {
-  HashMap<String, dynamic> resultMap = HashMap();
+class SignUpForm extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return _state();
+  }
+}
 
+class _state extends State<SignUpForm> {
+  HashMap<String, dynamic> resultMap = new HashMap();
+
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    var _formKey = GlobalKey<FormState>();
-
     final bloc = BaseBlock(context);
-
+    var _formKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: Colors.white, // change your color here
         ),
         title: Text(
-          'Sign In',
+          'Sign Up Account',
           style: TextStyle(color: Colors.white),
         ),
       ),
       body: Form(
         key: _formKey,
         child: Container(
-          margin: EdgeInsets.only(top : 20 ,left: 20, right: 20),
+          margin: EdgeInsets.only(left: 10, right: 10),
           child: Column(
-
             children: [
               TextFormField(
                 validator: (value) {
-                  if (value != null || !Utils.isEmailValid(value!)) {
-                    return "Please enter valid email.";
+                  if (value == null || value.isEmpty) {
+                    return "Please enter your display name";
+                  }
+                  ;
+                },
+                controller: nameController,
+                decoration: InputDecoration(
+                  labelText: "Display Name",
+                ),
+              ),
+              TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty || !Utils.isEmailValid(value)) {
+                    return "Please enter valid email";
                   }
                 },
                 controller: emailController,
@@ -51,8 +68,8 @@ class SignInPage extends StatelessWidget {
               ),
               TextFormField(
                 validator: (value) {
-                  if (value == null || value.length < 1) {
-                    return "Please enter password.";
+                  if (value == null || value.length < 4) {
+                    return 'Please enter atleast 5 digits password';
                   }
                 },
                 controller: passwordController,
@@ -68,55 +85,26 @@ class SignInPage extends StatelessWidget {
                     if (_formKey.currentState!.validate()) {
                       context
                           .read<AuthenticationService>()
-                          .signIn(
+                          .signUp(
                             email: emailController.text.trim(),
                             password: passwordController.text.trim(),
                           )
                           .then((value) => {
                                 if (value)
                                   {
-                                    resultMap.clear(),
-                                    resultMap["isLoggedIn"] = value,
-                                    bloc.goBackScreen(resultMap)
+                                    updatingUserName(
+                                        bloc, nameController.text.trim())
                                   }
                                 else
                                   {bloc.toast('authentication failed')}
                               });
+                    } else {
+                      log('validation faled');
                     }
                   },
-                  child: Text("Sign in"),
+                  child: Text("Sign up Account"),
                 ),
               ),
-              Row(
-                children: [
-                  Expanded(
-                      flex: 1,
-                      child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text('Forgot Password',
-                              style: TextStyle(
-                                color: Colors.red,
-                                decoration: TextDecoration.underline,
-                              )))),
-                  Container(
-                    width: 30,
-                  ),
-                  Expanded(
-                      flex: 1,
-                      child: GestureDetector(
-                          onTap: () {
-                            goSignUpScreen(bloc, context);
-                          },
-                          child: Text(
-                            'Signup',
-                            style: TextStyle(
-                              color: Colors.green,
-                              decoration: TextDecoration.underline,
-                            ),
-                          )))
-                ],
-              ),
-
             ],
           ),
         ),
@@ -124,22 +112,19 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  goSignUpScreen(BaseBlock bloc, BuildContext context) async {
-    var results = await Navigator.of(context).push(MaterialPageRoute<dynamic>(
-      builder: (BuildContext context) {
-        return SignUpForm();
-      },
-    ));
-
-    log('getting res');
-    if (results != null && results.containsKey('isLoggedIn')) {
-      log('isLoggedIn');
-      bool value = results['isLoggedIn'];
-      if (value) {
-        bloc.goBackScreen(results);
-      }
+  updatingUserName(BaseBlock bloc, String name) {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      user.updateDisplayName(name).then((value) => {
+            log('value coming back'),
+            resultMap.clear(),
+            resultMap["isLoggedIn"] = true,
+            bloc.goBackScreen(resultMap),
+          });
     } else {
-      log('control should not come her');
+      bloc.toast('User is Null');
     }
   }
 }
+
+

@@ -34,7 +34,7 @@ dependencies:
   firebase_auth: ^2.0.0
   firebase_database: ^7.1.1
   firebase_storage: ^9.0.0
-  stacked: ^2.1.9
+  stacked: ^2.2.1
   cached_network_image: ^3.0.0
   date_time_format: ^2.0.1
   intl: ^0.17.0
