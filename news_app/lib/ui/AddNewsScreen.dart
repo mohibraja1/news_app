@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/blocs/AddNewsScreen.dart';
 import 'package:image_picker/image_picker.dart';
@@ -145,6 +146,16 @@ class _State extends State<AddNewsScreen> {
   }
 
   void addNewsToFirebase(AddNewsScreenVM viewModel) {
+
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      return;
+    }
+    var reporterName = user.displayName;
+
+    log('the name is = $reporterName');
+
     if (titleController.text.isEmpty && descriptionController.text.isEmpty) {
       mBloc.toast('titil and desctiption is empty');
       return;
@@ -163,7 +174,7 @@ class _State extends State<AddNewsScreen> {
     final timeStamp = Utils().getFormatedTimeStamp();
 
     List<String> commentList = [];
-    final newsModel = NewsModel(timeStamp,titleController.text, descriptionController.text, _imageFilePath,0,commentList);
+    final newsModel = NewsModel(timeStamp,titleController.text, descriptionController.text, _imageFilePath,0,commentList,reporterName!);
 
     viewModel.addNewsRecordToFirebaseDB(newsModel).then((value) => {
           if (value)

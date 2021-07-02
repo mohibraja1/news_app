@@ -8,4 +8,5 @@ abstract class AppConstants{
   static final KEY_NEWS_IMAGE = 'NewsImage';
   static final KEY_LIKES = 'totalLikes';
   static final KEY_COMMENTS = 'Comments';
+  static final KEY_REPORTER_NAME = 'reporterName';
 }

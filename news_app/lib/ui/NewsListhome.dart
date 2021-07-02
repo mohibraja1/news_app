@@ -1,11 +1,16 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:news_app/blocs/BaseBlock.dart';
 import 'package:news_app/blocs/NewsListScreenBloc.dart';
 import 'package:news_app/ui/AddNewsScreen.dart';
 import 'package:news_app/ui/NewsDetailScreen.dart';
+import 'package:news_app/ui/sign_in_page.dart';
 import 'package:news_app/viewmodels/NewsListScreenVM.dart';
 import 'package:stacked/stacked.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 class NewsListHome extends StatefulWidget {
   NewsListHome({Key? key}) : super(key: key);
@@ -24,18 +29,22 @@ class _HomeState extends State<NewsListHome> {
       onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, viewModel, child) => Scaffold(
           floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              bloc.navigateNext(AddNewsScreen());
+            onPressed: () async {
+              _gooAddNewsScreen(bloc);
             },
             child: const Icon(Icons.add),
             backgroundColor: Colors.amber,
           ),
           appBar: AppBar(
-            title: Text('News List', style: TextStyle(color: Colors.white)),
+            title: Text('World News', style: TextStyle(color: Colors.white)),
           ),
           body: Stack(
             children: [
               addItems(context, viewModel, bloc),
+              GestureDetector(onTap : (){
+                 signout();
+              },child: Text('Clear data')),
+
             ],
           )),
     );
@@ -144,7 +153,6 @@ class _HomeState extends State<NewsListHome> {
                 ),
               ),
               onTap: () {
-
                 final item = viewModel.newsList[index];
                 bloc.navigateNext(NewsDetailScreen(item));
               },
@@ -166,5 +174,41 @@ class _HomeState extends State<NewsListHome> {
 
   log(Object ob) {
     print(ob);
+  }
+
+  _gooAddNewsScreen(BaseBlock bloc) async {
+    var user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      bloc.navigateNext(AddNewsScreen());
+      // bloc.navigateNext(SignInPage());
+    } else {
+      log('login first than go farward');
+
+
+      var results = await Navigator.of(context).push(new MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) {
+          return new SignInPage();
+        },
+      ));
+
+      log('jjjj');
+      if (results != null && results.containsKey('isLoggedIn')) {
+        bool value = results['isLoggedIn'];
+
+        if (value) {
+          bloc.navigateNext(AddNewsScreen());
+        }
+      }else{
+        log('controls hould ');
+      }
+    }
+  }
+
+  signout() async {
+    await FirebaseAuth.instance.signOut().then((value) => {
+
+      log('signout reult  ')
+    });
   }
 }

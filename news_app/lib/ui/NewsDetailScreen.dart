@@ -52,6 +52,13 @@ class _NewsDetailState extends State<NewsDetailScreen> {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
+                        "News Reporter: " +
+                            viewModel.newsModel.reporterName,
+                        style: TextStyle(fontSize: 15),
+                      ),
+                    ),Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
                         "News Description: " +
                             viewModel.newsModel.newsDesctiption,
                         style: TextStyle(fontSize: 15),

@@ -27,6 +27,7 @@ class MyFireBaseDatabase {
           AppConstants.KEY_NEWS_DESCRIPTION: newsModel.newsDesctiption,
           AppConstants.KEY_NEWS_IMAGE: newsModel.imagePath,
           AppConstants.KEY_LIKES: newsModel.totalLikes,
+          AppConstants.KEY_REPORTER_NAME: newsModel.reporterName,
         })
         .then((value) => {
               print('addEntryToFireBase success'),
@@ -59,6 +60,7 @@ class MyFireBaseDatabase {
         final description = values[AppConstants.KEY_NEWS_DESCRIPTION];
         final imagePath = values[AppConstants.KEY_NEWS_IMAGE];
         final likes = values[AppConstants.KEY_LIKES];
+        final reporterName = values[AppConstants.KEY_REPORTER_NAME];
 
         List<String> commentList = [];
         List<Object?> th = [];
@@ -101,7 +103,7 @@ class MyFireBaseDatabase {
         log('reading data and cometns  = ${commentList.length}');
 
         final newsmodel = NewsModel(
-            timeStamp, title, description, imagePath, likes, commentList);
+            timeStamp, title, description, imagePath, likes, commentList,reporterName);
         log('comes after parsing timeStamp = $timeStamp');
         // final newsmodel = NewsModel.fromEventObject(values);
         mList.add(newsmodel);

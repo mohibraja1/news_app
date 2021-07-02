@@ -6,9 +6,10 @@ class NewsModel {
   String newsTitle = '', newsDesctiption = '', imagePath = '';
   int totalLikes = 0;
   List<String> commentList = [];
+  String reporterName = '';
 
   NewsModel(this.timeStamp, this.newsTitle, this.newsDesctiption,
-      this.imagePath, this.totalLikes, this.commentList);
+      this.imagePath, this.totalLikes, this.commentList, this.reporterName);
 
   // Map<String, dynamic> toMap() {
   //   var map = Map<String, dynamic>();
@@ -34,6 +35,7 @@ class NewsModel {
     var newsDesctiption = snapshot.value[AppConstants.KEY_NEWS_DESCRIPTION];
     var imagePath = snapshot.value[AppConstants.KEY_NEWS_IMAGE];
     var totalLikes = snapshot.value[AppConstants.KEY_LIKES];
+    var reporterName = snapshot.value[AppConstants.KEY_REPORTER_NAME];
 
     List<String> commentList = [];
 
@@ -45,8 +47,10 @@ class NewsModel {
         }
       });
     }
+
+
     NewsModel newsModel = NewsModel(timeStamp, newsTitle, newsDesctiption,
-        imagePath, totalLikes, commentList);
+        imagePath, totalLikes, commentList,reporterName);
 
     return newsModel;
   }

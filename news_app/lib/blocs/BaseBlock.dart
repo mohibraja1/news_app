@@ -29,6 +29,9 @@ class BaseBlock {
     Navigator.pop(context);
   }
 
+  goBackScreen(Object result){
+    Navigator.pop(context,result);
+  }
   printLog(String msg) {
     print(msg);
   }
