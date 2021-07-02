@@ -203,23 +203,46 @@ class _HomeState extends State<NewsListHome> {
     } else {
       log('login first than go farward');
 
-      var results =
-          await Navigator.of(context).push(new MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) {
-          return new SignInPage();
-        },
-      ));
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Login Alert'),
+              content: Text('Only logged in user can add news, So Login first'),
+              actions: <Widget>[
+                ElevatedButton(
+                    child: Text('Cancel'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    }),
+                ElevatedButton(
+                    child: Text('Ok'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      gotoSigninScreen(bloc);
+                    })
+              ],
+            );
+          });
+    }
+  }
 
-      log('jjjj');
-      if (results != null && results.containsKey('isLoggedIn')) {
-        bool value = results['isLoggedIn'];
+  gotoSigninScreen(BaseBlock bloc) async {
+    var results =
+        await Navigator.of(context).push(new MaterialPageRoute<dynamic>(
+      builder: (BuildContext context) {
+        return new SignInPage();
+      },
+    ));
 
-        if (value) {
-          bloc.navigateNext(AddNewsScreen());
-        }
-      } else {
-        log('controls hould ');
+    if (results != null && results.containsKey('isLoggedIn')) {
+      bool value = results['isLoggedIn'];
+
+      if (value) {
+        bloc.navigateNext(AddNewsScreen());
       }
+    } else {
+      log('controls hould ');
     }
   }
 
