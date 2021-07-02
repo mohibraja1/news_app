@@ -39,24 +39,20 @@ class _HomeState extends State<NewsListHome> {
             iconTheme: IconThemeData(color: Colors.white),
             actions: [
               PopupMenuButton(
-
-                  color: Colors.white,
-                  itemBuilder: (context) => [
-                        PopupMenuItem(
-                          child: GestureDetector(
-                              onTap: () {
-                                User? user = FirebaseAuth.instance.currentUser;
-
-                                if (user == null) {
-                                  bloc.toast('No User found');
-                                } else {
-                                  signout();
-                                }
-                              },
-                              child: Text("Signout")),
-                          value: 1,
-                        ),
-                      ])
+                color: Colors.white,
+                onSelected: (value) {
+                  if (value == 1) {
+                    signout(bloc);
+                  }
+                },
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    child:
+                        GestureDetector(onTap: () {}, child: Text("Signout")),
+                    value: 1,
+                  ),
+                ],
+              )
             ],
             title: Text('World News', style: TextStyle(color: Colors.white)),
           ),
@@ -211,11 +207,15 @@ class _HomeState extends State<NewsListHome> {
               content: Text('Only logged in user can add news, So Login first'),
               actions: <Widget>[
                 ElevatedButton(
+                  style: ElevatedButton.styleFrom(primary: Colors.amberAccent),
+
                     child: Text('Cancel'),
                     onPressed: () {
                       Navigator.of(context).pop();
                     }),
                 ElevatedButton(
+
+                    style: ElevatedButton.styleFrom(primary: Colors.amber),
                     child: Text('Ok'),
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -246,9 +246,14 @@ class _HomeState extends State<NewsListHome> {
     }
   }
 
-  signout() async {
-    await FirebaseAuth.instance
-        .signOut()
-        .then((value) => {log('signout reult  ')});
+  signout(NewsListScreenBloc bloc) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      bloc.toast('No User found');
+    } else {
+      await FirebaseAuth.instance.signOut().then(
+          (value) => {log('signout reult  '), bloc.toast('signout success')});
+    }
   }
 }
