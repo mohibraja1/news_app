@@ -13,24 +13,31 @@ class NewsListScreenVM extends BaseViewModel {
   List<NewsModel> newsList = [];
   bool isUpdatedOnce = false;
 
-  late StreamSubscription<Event> _onNoteAddedSubscription;
-
   NewsListScreenVM() {
     _db = MyFireBaseDatabase();
 
-    _onNoteAddedSubscription = _db.getFireBaseObj().onChildAdded.listen((event) {
-      _onNoteAdded(event);
+    _db.getFireBaseObj().onChildAdded.listen((event) {
+      _onNewsAdded(event);
+    });
+
+    _db.getFireBaseObj().onChildRemoved.listen((event) {
+      _onNewsRemoved(event);
     });
   }
 
   get _TAG => 'News List Screen VM';
 
-  void _onNoteAdded(Event event) {
-
-    log('come in fun _onNoteAdded');
+  void _onNewsAdded(Event event) {
+    log('come in fun _onNewsAdded');
     notifyChange();
     newsList.add(NewsModel.fromEventObject(event.snapshot));
+  }
 
+  void _onNewsRemoved(Event event) {
+    notifyChange();
+
+    log('come in fun _onNewsRemoved');
+    newsList.remove(NewsModel.fromEventObject(event.snapshot));
   }
 
   initialise() {
@@ -44,8 +51,8 @@ class NewsListScreenVM extends BaseViewModel {
           log('isUpdatedOnce yes  & getting value $value'),
           isUpdatedOnce = true,
           newsList = value,
-
-      log('${newsList.length} is size of list')});
+          log('${newsList.length} is size of list')
+        });
 
     return newsList;
   }
@@ -60,5 +67,9 @@ class NewsListScreenVM extends BaseViewModel {
       log('${newsList.length} is size of list')});*/
 
     return newsList;
+  }
+
+  Future<void> deleteNewsModel(NewsModel newsModel) async {
+    return await _db.deleteNews(newsModel);
   }
 }

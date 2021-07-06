@@ -247,6 +247,14 @@ class MyFireBaseDatabase {
 
     return snapshot != null;
   }
+
+  Future<void> deleteNews(NewsModel newsModel) async{
+
+   return await _dbRef
+        .child(newsModel.timeStamp).remove();
+
+  }
+
 }
 
 void log(Object obj) {

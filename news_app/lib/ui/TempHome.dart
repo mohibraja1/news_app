@@ -19,7 +19,7 @@ class TempHome extends StatelessWidget{
           onPressed: () {
             bloc.navigateNext(NewsListHome());
           },
-          child: Text('Add More News'),
+          child: Text('News App'),
           style: ElevatedButton.styleFrom(
             primary: Colors.amber,
             padding: EdgeInsets.all(20), // Set padding

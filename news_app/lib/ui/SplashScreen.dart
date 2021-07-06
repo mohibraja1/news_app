@@ -14,7 +14,7 @@ class SplashScreen extends StatelessWidget {
     //MR: moving to news home screen.
     Timer(Duration(seconds: 1),
         () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => NewsListHome())));
+            builder: (BuildContext context) => TempHome())));
 
     return Scaffold(
       body: Center(

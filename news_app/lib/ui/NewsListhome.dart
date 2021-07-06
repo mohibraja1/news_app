@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:news_app/blocs/BaseBlock.dart';
 import 'package:news_app/blocs/NewsListScreenBloc.dart';
+import 'package:news_app/models/NewsModel.dart';
 import 'package:news_app/repo/authentication_service.dart';
 import 'package:news_app/ui/NewsDetailScreen.dart';
 import 'package:news_app/ui/sign_in_page.dart';
@@ -67,6 +68,7 @@ class _HomeState extends State<NewsListHome> {
             ],
           )),
     );
+
   }
 
   //MR: handling list view
@@ -83,6 +85,7 @@ class _HomeState extends State<NewsListHome> {
           shrinkWrap: true,
           itemCount: viewModel.newsList.length,
           itemBuilder: (BuildContext context, int index) {
+            final item = viewModel.newsList[index];
             return GestureDetector(
               child: Card(
                 margin: EdgeInsets.only(left: 11, right: 11, top: 5, bottom: 5),
@@ -116,12 +119,51 @@ class _HomeState extends State<NewsListHome> {
                 ),
               ),
               onTap: () {
-                final item = viewModel.newsList[index];
                 bloc.navigateNext(NewsDetailScreen(item));
+              },
+              onLongPress: () {
+
+                var user = FirebaseAuth.instance.currentUser;
+
+                if (user != null) {
+                  showDeleteNewsOption(item, viewModel);
+
+                }  else{
+                  showDialogLoginFirst(bloc);
+                }
               },
             );
           });
     }
+  }
+
+  void showDeleteNewsOption(NewsModel item, NewsListScreenVM viewModel) {
+
+    //MR: showing alert for delete news
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Delete News Alert'),
+            content: Text('Are you sure to delete the news permnently?'),
+            actions: <Widget>[
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(primary: Colors.amberAccent),
+                  child: Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(primary: Colors.amber),
+                  child: Text('Ok'),
+                  onPressed: () {
+                    viewModel
+                        .deleteNewsModel(item)
+                        .then((value) => {Navigator.of(context).pop()});
+                  })
+            ],
+          );
+        });
   }
 
   showProgressBar(bool showProgress) {
@@ -169,7 +211,7 @@ class _HomeState extends State<NewsListHome> {
                     child: Text('Ok'),
                     onPressed: () {
                       Navigator.of(context).pop();
-                      gotoSigninScreen(bloc); // navigate sign in screen
+                      gotoSigninScreen(bloc,false); // navigate sign in screen
                     })
               ],
             );
@@ -177,9 +219,9 @@ class _HomeState extends State<NewsListHome> {
     }
   }
 
-  gotoSigninScreen(BaseBlock bloc) async {
-
-    var results = await Navigator.of(context).push(new MaterialPageRoute<dynamic>(
+  gotoSigninScreen(BaseBlock bloc, bool forAddNew) async {
+    var results =
+        await Navigator.of(context).push(new MaterialPageRoute<dynamic>(
       builder: (BuildContext context) {
         return new SignInPage();
       },
@@ -191,7 +233,11 @@ class _HomeState extends State<NewsListHome> {
 
       if (value) {
         //MR: navigate add news screen
-        bloc.navigateNext(AddNewsScreen());
+
+        if (forAddNew) {
+          bloc.navigateNext(AddNewsScreen());
+
+        }
       }
     } else {
       log('controls hould ');
@@ -208,4 +254,35 @@ class _HomeState extends State<NewsListHome> {
           (value) => {log('signout reult  '), bloc.toast('signout success')});
     }
   }
+
+  showDialogLoginFirst(BaseBlock bloc){
+    //MR: showing alert for login
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Login Alert'),
+            content: Text('Only logged in user can add /delete news, So Login first'),
+            actions: <Widget>[
+              ElevatedButton(
+                  style:
+                  ElevatedButton.styleFrom(primary: Colors.amberAccent),
+                  child: Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(primary: Colors.amber),
+                  child: Text('Ok'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+
+                    gotoSigninScreen(bloc,true); // navigate sign in screen
+
+                  })
+            ],
+          );
+        });
+  }
+
 }
