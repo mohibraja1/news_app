@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:news_app/blocs/BaseBlock.dart';
 import 'package:news_app/blocs/NewsListScreenBloc.dart';
-import 'package:news_app/ui/AddNewsScreen.dart';
+import 'package:news_app/repo/authentication_service.dart';
 import 'package:news_app/ui/NewsDetailScreen.dart';
 import 'package:news_app/ui/sign_in_page.dart';
 import 'package:news_app/viewmodels/NewsListScreenVM.dart';
@@ -12,6 +12,11 @@ import 'package:stacked/stacked.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
+import 'AddNewsScreen.dart';
+
+var TAG = 'NewsListHome';
+
+//MR: this class will show all news list
 class NewsListHome extends StatefulWidget {
   NewsListHome({Key? key}) : super(key: key);
 
@@ -42,7 +47,7 @@ class _HomeState extends State<NewsListHome> {
                 color: Colors.white,
                 onSelected: (value) {
                   if (value == 1) {
-                    signout(bloc);
+                    signout(bloc, context);
                   }
                 },
                 itemBuilder: (context) => [
@@ -64,63 +69,7 @@ class _HomeState extends State<NewsListHome> {
     );
   }
 
-  addFutureItems(BuildContext context, NewsListScreenVM viewModel,
-      NewsListScreenBloc bloc) {
-    return Container(
-      child: FutureBuilder(
-          future: viewModel.getNewsListFromFirebase(),
-          builder: (context, snapShot) {
-            if (!viewModel.isUpdatedOnce) {
-              return showProgressBar(!viewModel.isUpdatedOnce);
-            } else if (viewModel.newsList.isEmpty) {
-              return Center(
-                child: Text('No Data found yet'),
-              );
-            } else {
-              return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: viewModel.newsList.length,
-                  itemBuilder: (BuildContext context, int index) =>
-                      GestureDetector(
-                        child: Card(
-                          margin: EdgeInsets.only(
-                              left: 11, right: 11, top: 5, bottom: 5),
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                top: 5, bottom: 5, left: 12, right: 12),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  "News title: " +
-                                      viewModel.newsList[index].newsTitle,
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      textBaseline: TextBaseline.alphabetic),
-                                  maxLines: 2,
-                                ),
-                                Text(
-                                  "News Description: " +
-                                      viewModel.newsList[index].newsDesctiption,
-                                  style: TextStyle(fontSize: 15),
-                                  maxLines: 3,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        onTap: () {
-                          final item = viewModel.newsList[index];
-                          log('clicked item time stamp = ${item.timeStamp}');
-                          bloc.navigateNext(NewsDetailScreen(item));
-                        },
-                      ));
-            }
-          }),
-    );
-  }
-
+  //MR: handling list view
   addItems(BuildContext context, NewsListScreenVM viewModel,
       NewsListScreenBloc bloc) {
     if (!viewModel.isUpdatedOnce) {
@@ -190,6 +139,7 @@ class _HomeState extends State<NewsListHome> {
     print(ob);
   }
 
+  //MR: navigate to add news screen
   _gooAddNewsScreen(BaseBlock bloc) async {
     var user = FirebaseAuth.instance.currentUser;
 
@@ -199,6 +149,7 @@ class _HomeState extends State<NewsListHome> {
     } else {
       log('login first than go farward');
 
+      //MR: showing alert for login
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -207,19 +158,18 @@ class _HomeState extends State<NewsListHome> {
               content: Text('Only logged in user can add news, So Login first'),
               actions: <Widget>[
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: Colors.amberAccent),
-
+                    style:
+                        ElevatedButton.styleFrom(primary: Colors.amberAccent),
                     child: Text('Cancel'),
                     onPressed: () {
                       Navigator.of(context).pop();
                     }),
                 ElevatedButton(
-
                     style: ElevatedButton.styleFrom(primary: Colors.amber),
                     child: Text('Ok'),
                     onPressed: () {
                       Navigator.of(context).pop();
-                      gotoSigninScreen(bloc);
+                      gotoSigninScreen(bloc); // navigate sign in screen
                     })
               ],
             );
@@ -228,17 +178,19 @@ class _HomeState extends State<NewsListHome> {
   }
 
   gotoSigninScreen(BaseBlock bloc) async {
-    var results =
-        await Navigator.of(context).push(new MaterialPageRoute<dynamic>(
+
+    var results = await Navigator.of(context).push(new MaterialPageRoute<dynamic>(
       builder: (BuildContext context) {
         return new SignInPage();
       },
     ));
 
+    //MR: getting results from sign in screen
     if (results != null && results.containsKey('isLoggedIn')) {
       bool value = results['isLoggedIn'];
 
       if (value) {
+        //MR: navigate add news screen
         bloc.navigateNext(AddNewsScreen());
       }
     } else {
@@ -246,13 +198,13 @@ class _HomeState extends State<NewsListHome> {
     }
   }
 
-  signout(NewsListScreenBloc bloc) async {
+  signout(NewsListScreenBloc bloc, BuildContext context) async {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
       bloc.toast('No User found');
     } else {
-      await FirebaseAuth.instance.signOut().then(
+      await context.read<AuthenticationService>().signOut().then(
           (value) => {log('signout reult  '), bloc.toast('signout success')});
     }
   }

@@ -40,7 +40,7 @@ class SignInPage extends StatelessWidget {
             children: [
               TextFormField(
                 validator: (value) {
-                  if (value != null || !Utils.isEmailValid(value!)) {
+                  if (value == null || !Utils.isEmailValid(value)) {
                     return "Please enter valid email.";
                   }
                 },
@@ -66,12 +66,10 @@ class SignInPage extends StatelessWidget {
                   style: ElevatedButton.styleFrom(primary: Colors.amber),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      context
-                          .read<AuthenticationService>()
-                          .signIn(
+
+                      context.read<AuthenticationService>().signIn(
                             email: emailController.text.trim(),
-                            password: passwordController.text.trim(),
-                          )
+                            password: passwordController.text.trim(),)
                           .then((value) => {
                                 if (value)
                                   {
@@ -105,6 +103,7 @@ class SignInPage extends StatelessWidget {
                       flex: 1,
                       child: GestureDetector(
                           onTap: () {
+                            //MR : creating new account
                             goSignUpScreen(bloc, context);
                           },
                           child: Text(
@@ -131,11 +130,12 @@ class SignInPage extends StatelessWidget {
       },
     ));
 
-    log('getting res');
+    //MR: getting result from signup screen
     if (results != null && results.containsKey('isLoggedIn')) {
       log('isLoggedIn');
       bool value = results['isLoggedIn'];
       if (value) {
+        //MR: going back screen with results
         bloc.goBackScreen(results);
       }
     } else {

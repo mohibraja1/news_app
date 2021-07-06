@@ -29,6 +29,7 @@ class AuthenticationService {
       return true;
     } on FirebaseAuthException catch (e) {
       log('${e.message}');
+      log(' signin failed message = ${e.message}');
 
       return false;
     }
@@ -46,7 +47,7 @@ class AuthenticationService {
       log('singup success');
       return true;
     } on FirebaseAuthException catch (e) {
-      log('${e.message}');
+      log(' signup failed message = ${e.message}');
       return false;
     }
   }

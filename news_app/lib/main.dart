@@ -15,14 +15,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    Firebase.initializeApp();
+
     return MultiProvider(
       providers: [
-
         Provider<AuthenticationService>(
           create: (_) => AuthenticationService(FirebaseAuth.instance),
         ),
         StreamProvider(
-          create: (context) => context.read<AuthenticationService>().authStateChanges, initialData: null,
+          create: (context) =>
+              context.read<AuthenticationService>().authStateChanges,
+          initialData: null,
         )
       ],
       child: MaterialApp(
@@ -33,7 +36,6 @@ class MyApp extends StatelessWidget {
           ),
           primaryColor: Colors.amber,
           primarySwatch: Colors.blue,
-
         ),
         debugShowCheckedModeBanner: false,
         // home: MyHomePage(title: 'Flutter Demo Home Page'),
@@ -42,7 +44,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -68,12 +69,13 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title, style: TextStyle(color: Colors.white),),
+        title: Text(
+          widget.title,
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: Center(
-
         child: Column(
-
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
@@ -81,10 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .headline4,
+              style: Theme.of(context).textTheme.headline4,
             ),
           ],
         ),

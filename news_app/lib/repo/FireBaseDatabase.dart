@@ -8,7 +8,7 @@ import 'package:news_app/utils/AppConstants.dart';
 import 'package:news_app/utils/Utils.dart';
 
 class MyFireBaseDatabase {
-  final TAG = 'MyFireBaseDatabase';
+  final _TAG = 'MyFireBaseDatabase';
   static DatabaseReference _dbRef =
       FirebaseDatabase.instance.reference().child('MyNews');
 

@@ -8,11 +8,14 @@ class BaseBlock {
   late BuildContext context;
   late double screenWidth;
   late double screenHeight;
+  var TAG = 'BaseBlock';
 
   BaseBlock(BuildContext context) {
     this.context = context;
     this.screenWidth = Utils.getScreenWidth(context);
     this.screenHeight = Utils.getScreenHeight(context);
+
+    TAG = this.runtimeType.toString();
   }
 
   navigateNextReplacement(Widget widget) {

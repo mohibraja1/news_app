@@ -1,17 +1,13 @@
-import 'dart:async';
-import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app/blocs/AddNewsScreen.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:news_app/models/NewsModel.dart';
 import 'package:news_app/repo/FireBaseDatabase.dart';
 import 'package:news_app/utils/Utils.dart';
 import 'package:news_app/viewmodels/AddNewsScreenVM.dart';
 import 'package:stacked/stacked.dart';
 
-final TAG = 'AddNewsScreen';
+final _TAG = 'AddNewsScreen';
 
 class AddNewsScreen extends StatefulWidget {
   @override
@@ -25,9 +21,6 @@ class _State extends State<AddNewsScreen> {
 
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-
-  String _imageFilePath = '';
-  final _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -96,10 +89,10 @@ class _State extends State<AddNewsScreen> {
                               child: TextButton(
                                 style: ButtonStyle(),
                                 onPressed: () {
-                                  mBloc.printLog("add image button clicked");
 
+                                  mBloc.printLog("add image button clicked");
                                   if (!viewModel.isShowingProgress) {
-                                    pickImageFromGallery(viewModel);
+                                    viewModel.pickImageFromGallery();
                                   }
                                 },
                                 child: Container(
@@ -145,8 +138,8 @@ class _State extends State<AddNewsScreen> {
     );
   }
 
+  //MR: add news to db
   void addNewsToFirebase(AddNewsScreenVM viewModel) {
-
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user == null) {
@@ -174,7 +167,14 @@ class _State extends State<AddNewsScreen> {
     final timeStamp = Utils().getFormatedTimeStamp();
 
     List<String> commentList = [];
-    final newsModel = NewsModel(timeStamp,titleController.text, descriptionController.text, _imageFilePath,0,commentList,reporterName!);
+    final newsModel = NewsModel(
+        timeStamp,
+        titleController.text,
+        descriptionController.text,
+        viewModel.imageFileLink,
+        0,
+        commentList,
+        reporterName!);
 
     viewModel.addNewsRecordToFirebaseDB(newsModel).then((value) => {
           if (value)
@@ -184,42 +184,26 @@ class _State extends State<AddNewsScreen> {
         });
   }
 
-  Future<void> pickImageFromGallery(AddNewsScreenVM viewModel) async {
-    mBloc.printLog('pickImageFromGallery');
-    final PickedFile? pickedFile =
-        await _picker.getImage(source: ImageSource.gallery);
-
-    final downloadLink =
-        viewModel.uploadImageToFirebase(File(pickedFile!.path));
-
-    downloadLink.then((value) => {
-          setState(() {
-            print('value is $value');
-            _imageFilePath = value;
-          })
-        });
-  }
-
   _previewImage(AddNewsScreenVM viewModel) {
-    if (_imageFilePath.isNotEmpty) {
-      print(_imageFilePath);
+    if (viewModel.imageFileLink.isNotEmpty) {
+      print(viewModel.imageFileLink);
 
       viewModel.shouldShowProgress(false);
       return Container(
           margin: EdgeInsets.only(top: 20, bottom: 20),
-          child: Image.network(_imageFilePath));
+          child: Image.network(viewModel.imageFileLink));
     } else {
       return Container(width: 1, height: 1);
     }
   }
 
   showProgressBar(bool showProgress) {
-    log('$TAG showProgressBar');
+    log('$_TAG showProgressBar');
     if (showProgress) {
-      log('$TAG showing');
+      log('$_TAG showing');
       return Center(child: CircularProgressIndicator());
     } else {
-      log('$TAG not showing');
+      log('$_TAG not showing');
       return Container();
     }
   }

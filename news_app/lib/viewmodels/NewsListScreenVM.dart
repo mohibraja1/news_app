@@ -28,7 +28,7 @@ class NewsListScreenVM extends BaseViewModel {
   void _onNoteAdded(Event event) {
 
     log('come in fun _onNoteAdded');
-    // notifyChange();
+    notifyChange();
     newsList.add(NewsModel.fromEventObject(event.snapshot));
 
   }
