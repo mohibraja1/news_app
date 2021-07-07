@@ -7,11 +7,14 @@ import 'package:news_app/ui/NewsListhome.dart';
 
 import 'anims/Anim4.dart';
 import 'anims/Anim5.dart';
+import 'anims/Anim7.dart';
 import 'anims/AnimController6.dart';
 import 'anims/AnimController.dart';
+import 'anims/AnimatedBuilder.dart';
 
 
 class TempHome extends StatelessWidget{
+
   @override
   Widget build(BuildContext context) {
 
@@ -22,8 +25,8 @@ class TempHome extends StatelessWidget{
       body: Container(
         child:  ListView(
           children: [
-            Padding(padding: EdgeInsets.all(5)),
 
+            Padding(padding: EdgeInsets.all(5)),
             Center(
               widthFactor: 100,
               child: ElevatedButton(
@@ -52,6 +55,7 @@ class TempHome extends StatelessWidget{
                 ),
               ),
             ),
+
             Padding(padding: EdgeInsets.all(5)),
             Center(
               widthFactor: 100,
@@ -88,9 +92,24 @@ class TempHome extends StatelessWidget{
               widthFactor: 100,
               child: ElevatedButton(
                 onPressed: () {
-                  bloc.navigateNext(Anim6());
+                  bloc.navigateNext(MyAnim());
                 },
                 child: Text('Anim6 App'),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.amber,
+                  padding: EdgeInsets.all(20), // Set padding
+                ),
+              ),
+            ),
+
+            Padding(padding: EdgeInsets.all(5)),
+            Center(
+              widthFactor: 100,
+              child: ElevatedButton(
+                onPressed: () {
+                  bloc.navigateNext(AnimatedCirclePage());
+                },
+                child: Text('AnimatedCirclePage App'),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.amber,
                   padding: EdgeInsets.all(20), // Set padding
@@ -102,4 +121,5 @@ class TempHome extends StatelessWidget{
       ),
     );
   }
+
 }
