@@ -17,11 +17,10 @@ class _AnimatedCirclePageState extends State<AnimatedCirclePage>
   @override
   void initState() {
     super.initState();
-    super.initState();
     animationController = AnimationController(duration: Duration(seconds: 4,),
       vsync: this,
     );
-    // animation = Tween(begin: 100, end: 200).animate(animationController);
+    animation = Tween(begin: 100, end: 200).animate(animationController);
 
 
     animationController.addStatusListener(animationStatusListener);
@@ -63,7 +62,7 @@ class _AnimatedCirclePageState extends State<AnimatedCirclePage>
         title: Text("Rotatingdff Circle"),
       ),
 
-      body: Center(
+      /* body: Center(
         child: TweenAnimationBuilder(
           tween: _scaleTween,
           duration: Duration(seconds: 4),
@@ -74,7 +73,7 @@ class _AnimatedCirclePageState extends State<AnimatedCirclePage>
           child: Text('what is '),
 
         ),
-      ),
+      ),*/
 
       //Mr: scaling using tween
       /*body: Center(
@@ -92,7 +91,7 @@ class _AnimatedCirclePageState extends State<AnimatedCirclePage>
 
 
       //MR: below transform animation
-      /*body: AnimatedBuilder(
+      body: AnimatedBuilder(
         animation: animationController,
         builder: (BuildContext context, Widget? child) {
           return Stack(
@@ -109,13 +108,13 @@ class _AnimatedCirclePageState extends State<AnimatedCirclePage>
               ),
             ],
           );
-          *//*return Transform.rotate(
+          return Transform.rotate(
             child: child,
             angle: 3.1416 * 2 * animation.value,
             origin: Offset(0, 71),
-          );*//*
+          );
         },
-      ),*/
+      ),
     );
   }
 }

@@ -11,6 +11,7 @@ import 'anims/Anim7.dart';
 import 'anims/AnimController6.dart';
 import 'anims/AnimController.dart';
 import 'anims/AnimatedBuilder.dart';
+import 'anims/signin/SignInAnimations.dart';
 
 
 class TempHome extends StatelessWidget{
@@ -110,6 +111,21 @@ class TempHome extends StatelessWidget{
                   bloc.navigateNext(AnimatedCirclePage());
                 },
                 child: Text('AnimatedCirclePage App'),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.amber,
+                  padding: EdgeInsets.all(20), // Set padding
+                ),
+              ),
+            ),
+
+            Padding(padding: EdgeInsets.all(5)),
+            Center(
+              widthFactor: 100,
+              child: ElevatedButton(
+                onPressed: () {
+                  bloc.navigateNext(SignInAnimations());
+                },
+                child: Text('Sign in animations'),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.amber,
                   padding: EdgeInsets.all(20), // Set padding
