@@ -11,7 +11,8 @@ import 'anims/Anim7.dart';
 import 'anims/AnimController6.dart';
 import 'anims/AnimController.dart';
 import 'anims/AnimatedBuilder.dart';
-import 'anims/signin/SignInAnimations.dart';
+import 'anims/CustomSampleAnim.dart';
+import 'anims/signin/SigninPage.dart';
 
 
 class TempHome extends StatelessWidget{
@@ -123,9 +124,25 @@ class TempHome extends StatelessWidget{
               widthFactor: 100,
               child: ElevatedButton(
                 onPressed: () {
-                  bloc.navigateNext(SignInAnimations());
+                  bloc.navigateNext(SignInPage());
                 },
                 child: Text('Sign in animations'),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.amber,
+                  padding: EdgeInsets.all(20), // Set padding
+                ),
+              ),
+            ),
+
+
+            Padding(padding: EdgeInsets.all(5)),
+            Center(
+              widthFactor: 100,
+              child: ElevatedButton(
+                onPressed: () {
+                  bloc.navigateNext(CustomSampleAnim());
+                },
+                child: Text('CustomSampleAnim'),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.amber,
                   padding: EdgeInsets.all(20), // Set padding

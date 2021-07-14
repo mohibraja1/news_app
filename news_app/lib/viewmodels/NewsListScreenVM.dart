@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:news_app/models/NewsModel.dart';
 import 'package:news_app/repo/FireBaseDatabase.dart';
-import 'package:news_app/ui/AddNewsScreen.dart';
-import 'package:news_app/viewmodels/BaseViewModel.dart';
 
 import 'package:firebase_database/firebase_database.dart';
 
-class NewsListScreenVM extends BaseViewModel {
+import 'MyBaseViewModel.dart';
+
+class NewsListScreenVM extends MyBaseViewModel {
   late MyFireBaseDatabase _db;
 
   List<NewsModel> newsList = [];
@@ -29,12 +29,12 @@ class NewsListScreenVM extends BaseViewModel {
 
   void _onNewsAdded(Event event) {
     log('come in fun _onNewsAdded');
-    notifyChange();
+    notifyListeners();
     newsList.add(NewsModel.fromEventObject(event.snapshot));
   }
 
   void _onNewsRemoved(Event event) {
-    notifyChange();
+    notifyListeners();
 
     log('come in fun _onNewsRemoved');
     newsList.remove(NewsModel.fromEventObject(event.snapshot));

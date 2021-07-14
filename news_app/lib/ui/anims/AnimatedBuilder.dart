@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/repo/FireBaseDatabase.dart';
 
 class AnimatedCirclePage extends StatefulWidget {
 

@@ -3,11 +3,11 @@ import 'dart:io';
 
 import 'package:news_app/models/NewsModel.dart';
 import 'package:news_app/repo/FireBaseDatabase.dart';
-import 'package:news_app/viewmodels/BaseViewModel.dart';
+import 'package:news_app/viewmodels/MyBaseViewModel.dart';
 
 import 'package:image_picker/image_picker.dart';
 
-class AddNewsScreenVM extends BaseViewModel {
+class AddNewsScreenVM extends MyBaseViewModel {
   late MyFireBaseDatabase _db;
   String imageFileLink = '';
 

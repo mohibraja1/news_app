@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:news_app/models/NewsModel.dart';
 import 'package:news_app/repo/FireBaseDatabase.dart';
 import 'package:news_app/ui/AddNewsScreen.dart';
-import 'package:news_app/viewmodels/BaseViewModel.dart';
+import 'package:news_app/viewmodels/MyBaseViewModel.dart';
 
 import 'package:firebase_database/firebase_database.dart';
 
-class NewsDetailScreenVM extends BaseViewModel {
+class NewsDetailScreenVM extends MyBaseViewModel {
   late MyFireBaseDatabase _db;
 
   List<NewsModel> newsList = [];
